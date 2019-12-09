@@ -9,13 +9,6 @@ class TestTEST(unittest.TestCase):
         instructions = [1101, 100, -1, 4, 0]
         self.assertEqual(calc(instructions), [1101, 100, -1, 4, 99])
 
-
-def get_parameter(n, parameter, mode):
-    if mode == '0':
-        return int(n[parameter])
-    elif mode == '1':
-        return int(parameter)
-
 def add_to_length(a):
     while len(a) < 5:
         a = '0' + a
@@ -23,13 +16,29 @@ def add_to_length(a):
 
 def calc(n):
     position = 0
+
+    def get_parameter(parameter, mode):
+        if mode == '0':
+            return int(n[parameter])
+        elif mode == '1':
+            return int(parameter)
+
+    def add(p1, p2):
+        n[n[position+3]] = p1 + p2
+
+    def multiply(p1, p2):
+        n[n[position+3]] = p1 * p2
+
+    
     while True:
         step = 4
         k = str(n[position])
         if k == '1':
-            n[n[position+3]] = n[n[position+1]] + n[n[position+2]]
+            # n[n[position+3]] = n[n[position+1]] + n[n[position+2]]
+            add(n[n[position+1]], n[n[position+2]])
         elif k == '2':
-            n[n[position+3]] = n[n[position+1]] * n[n[position+2]]
+            # n[n[position+3]] = n[n[position+1]] * n[n[position+2]]
+            multiply(n[n[position+1]], n[n[position+2]])
         elif k == '3':
             n[n[position+1]] = int(input())
             step = 2
@@ -44,20 +53,20 @@ def calc(n):
             modes = modes1[:3] 
 
             if int(opcode) == 1:
-                p1 = get_parameter(n, n[position+1], modes[2])
-                p2 = get_parameter(n, n[position+2], modes[1])
-                p3 = get_parameter(n, n[position+3], modes[0])
-                n[n[position+3]] = p1 + p2
+                p1 = get_parameter(n[position+1], modes[2])
+                p2 = get_parameter(n[position+2], modes[1])
+                # n[n[position+3]] = p1 + p2
+                add(p1, p2)
             elif int(opcode) == 2:
-                p1 = get_parameter(n, n[position+1], modes[2])
-                p2 = get_parameter(n, n[position+2], modes[1])
-                p3 = get_parameter(n, n[position+3], modes[0])
-                n[n[position+3]] = p1 * p2
+                p1 = get_parameter(n[position+1], modes[2])
+                p2 = get_parameter(n[position+2], modes[1])
+                # n[n[position+3]] = p1 * p2
+                multiply(p1, p2)
             elif int(opcode) == 3:
-                p1 = get_parameter(n, n[position+1], modes[2])
+                p1 = get_parameter(n[position+1], modes[2])
                 n[p1] = int(input())
             elif int(opcode) == 4:
-                p1 = get_parameter(n, n[position+1], modes[2])
+                p1 = get_parameter(n[position+1], modes[2])
                 print(p1)
 
         position += step
