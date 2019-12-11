@@ -8,6 +8,12 @@ class TestGetMessage(unittest.TestCase):
         self.assertEqual(get_message(line, 2, 2), '0110')
 
 
+def print_message(message, width, height):
+    for i in range(0, len(message), width):
+        row = message[i:i+width]
+        print(row)
+
+
 def get_message(encoded, width, height):
     area = width*height
     layers = []
@@ -25,12 +31,6 @@ def get_message(encoded, width, height):
                 final_layer += pixel
                 break
 
-    print('MESSAGE')
-
-    for i in range(0, len(final_layer), width):
-        row = final_layer[i:i+width]
-        print(row)
-
     return(final_layer)
 
 
@@ -43,4 +43,7 @@ if __name__ == "__main__":
     for line in file:
         encoded += line.rstrip()
 
-    password = get_message(encoded, 25, 6)
+    width = 25
+    height = 6
+    message = get_message(encoded, width, height)
+    print_message(message, width, height)
