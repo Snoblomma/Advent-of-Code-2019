@@ -18,8 +18,14 @@ class TestCalcOrbit(unittest.TestCase):
                         'K)L',
                         'K)YOU',
                         'I)SAN']
-        self.assertEqual(calc_orbits(instructions), 42)
+        self.assertEqual(calc_orbits(instructions), 4)
 
+def get_fisrt_common_item(x, y):
+    for i in x:
+        for j in y:
+            if i == j:
+                return i, x.index(i), y.index(i)
+    return None, None, None
 
 def calc_orbits(n):
     d = {}
@@ -28,26 +34,23 @@ def calc_orbits(n):
         k = item.split(')')
         d[k[1]] = k[0]
 
-    k2 = []
-    k3 = []
-    k11 = 'SAN'
-    while d[k11] != 'COM':
-        k11 = d[k11]
-        k2.append(k11)
+    orbit1 = []
+    orbit2 = []
+    point1 = 'SAN'
+    while d[point1] != 'COM':
+        point1 = d[point1]
+        orbit1.append(point1)
 
-    k21 = 'YOU'
-    while d[k21] != 'COM':
-        k21 = d[k21]
-        k3.append(k21)
+    point2 = 'YOU'
+    while d[point2] != 'COM':
+        point2 = d[point2]
+        orbit2.append(point2)
 
-    print(k2)
-    print(k3)
-
-    return(count)
-
+    item, loc1, loc2 = get_fisrt_common_item(orbit1, orbit2)
+    return(loc1 + loc2)
 
 if __name__ == "__main__":
-    unittest.main()
+    # unittest.main()
     __location__ = os.path.realpath(os.path.join(
         os.getcwd(), os.path.dirname(__file__)))
     file = open(os.path.join(__location__, 'input.txt'))
