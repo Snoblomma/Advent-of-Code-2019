@@ -14,26 +14,21 @@ def calc_orbits(n):
     count = 0
     for item in n:
         k = item.split(')')
-        # print(k)
-        k1 = k[0]
-        k2 = k[1]
-        if k1 not in d.keys():
-            d[k2] = 1
-        else:
-            # count += copy.deepcopy(d[k1])+1
-            d[k2] = copy.deepcopy(d[k1])+1
+        d[k[1]] = k[0]
+    
+    for item in d.keys():
+        k = item
+        temp = 1
+        while d[k] != 'COM':
+            k = d[k]
+            temp +=1
+        count += temp
 
-    print(d)
-    for i in d.values():
-        count += i
-    print(count)
-    # for i in d:
-    #     print(i)
     return(count)
 
 
 if __name__ == "__main__":
-    unittest.main()
+    # unittest.main()
     __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
     file = open(os.path.join(__location__, 'input.txt'))
     n = []
