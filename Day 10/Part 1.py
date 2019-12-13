@@ -83,14 +83,47 @@ def get_asteroid_locations(lines):
                 locations.append([i, j])
     return locations
 
+
 def present(x, y, location_vectors):
     for location_vector in location_vectors:
-        if location_vector[0]/x == location_vector[1]/y:
-            print('PRESENT')
-            print(x, y, location_vector[0], location_vector[1])
-            return True
+        if location_vector[0]/x == location_vector[1]/y and location_vector[0] != x and location_vector[1] != y:
+            if are_opposites(location_vector[0], x) == False and are_opposites(location_vector[1], y) == False:
+                return True
+            else:
+                print('ARE OPPOSITES')
+                print(x, y, location_vector[0], location_vector[1])
 
     return False
+
+def are_opposites(a, b):
+    return a*b < 0
+
+def eliminate(location_vectors):
+
+    print('OLD VECTOR')
+    print(location_vectors)
+    new_vectors = []
+    same_vectors = []
+    for vector in location_vectors:
+        x = vector[0]
+        y = vector[0]
+        if x != 0 and y != 0:
+            if present(x, y, new_vectors) == True:
+                if [x, y] not in same_vectors:
+                    same_vectors.append([x, y])
+            new_vectors.append(vector)
+
+    # print('NEW VECTOR')
+    # print(new_vectors)
+    # print('Same VECTOR')
+    # print(same_vectors)
+    new_same_vectors = []
+    for i in same_vectors:
+        if i in location_vectors:
+            new_same_vectors.append(i)
+
+    return location_vectors, same_vectors
+
 
 def get_location(lines):
     asteroids = 0
@@ -118,9 +151,10 @@ def get_location(lines):
                 y = location[1]-current[1]
 
                 if x != 0 and y != 0:
-                    if present(x, y, location_vectors) == False:
-                        location_vectors.append([x, y])
+                    # if present(x, y, location_vectors) == False:
+                    location_vectors.append([x, y])
                 else:
+                    # location_vectors.append([x, y])
                     if x == 0 and y > 0 and x_more == False:
                         location_vectors.append([x, y])
                         x_more = True
@@ -134,11 +168,13 @@ def get_location(lines):
                         location_vectors.append([x, y])
                         y_less = True
 
+        location_vectors, same_vectors = eliminate(location_vectors)
+        print('Current vector:', str(len(location_vectors)), len(same_vectors), str(location_vectors), 'same verctors: ', same_vectors)
         vectors.append(location_vectors)
 
-    print('VECTORS')
-    for vector in vectors:
-        print(str(len(vector)), str(vector))
+    # print('VECTORS')
+    # for vector in vectors:
+    #     print('Current vector:', str(len(vector)), str(vector))
     return(asteroids)
 
 
