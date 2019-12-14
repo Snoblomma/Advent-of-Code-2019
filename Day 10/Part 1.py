@@ -88,6 +88,8 @@ def present(x, y, location_vectors):
     for location_vector in location_vectors:
         if location_vector[0]/x == location_vector[1]/y and location_vector[0] != x and location_vector[1] != y:
             if are_opposites(location_vector[0], x) == False and are_opposites(location_vector[1], y) == False:
+                print('ARE SAME')
+                print(x, y, location_vector[0], location_vector[1])
                 return True
             else:
                 print('ARE OPPOSITES')
@@ -116,13 +118,18 @@ def eliminate(location_vectors):
     # print('NEW VECTOR')
     # print(new_vectors)
     # print('Same VECTOR')
-    # print(same_vectors)
+    print('Checking same vecors')
     new_same_vectors = []
     for i in same_vectors:
-        if i in location_vectors:
-            new_same_vectors.append(i)
+        # if i in location_vectors:
+        prest = present(i[0], i[1], location_vectors)
+        print('PRESENT?', i[0], i[1], prest)
+        # print(present(i[0], i[1], location_vectors))
+        if prest == False:
+            if i not in location_vectors:
+                new_same_vectors.append(i)
 
-    return location_vectors, same_vectors
+    return location_vectors, new_same_vectors
 
 
 def get_location(lines):
