@@ -168,19 +168,15 @@ def get_location(lines):
                         y_less = True
 
         location_vectors, same_vectors = eliminate(location_vectors)
-        # print('Current vector:', str(len(location_vectors)), len(
-        #     same_vectors), str(location_vectors), 'same verctors: ', same_vectors)
         vectors.append(location_vectors)
         locations_asteroids.append(len(location_vectors)-len(same_vectors))
 
-    # # print('LOCATION ASTEROIDS')
-    # # print(locations_asteroids)
     asteroids = max(locations_asteroids)
     return(asteroids)
 
 
 if __name__ == "__main__":
-    unittest.main()
+    # unittest.main()
     __location__ = os.path.realpath(os.path.join(
         os.getcwd(), os.path.dirname(__file__)))
     file = open(os.path.join(__location__, 'input.txt'))
