@@ -1,5 +1,6 @@
 import os
 import unittest
+import copy
 
 
 class TestAsteroidDetector(unittest.TestCase):
@@ -11,68 +12,68 @@ class TestAsteroidDetector(unittest.TestCase):
                  '...##']
         self.assertEqual(get_location(lines), 8)
 
-    # def test1(self):
-    #     lines = ['......#.#.',
-    #              '#..#.#....',
-    #              '..#######.'
-    #              '.#.#.###..',
-    #              '.#..#.....',
-    #              '..#....#.#',
-    #              '#..#....#.',
-    #              '.##.#..###',
-    #              '##...#..#.',
-    #              '.#....####']
-    #     self.assertEqual(get_location(lines), 33)
+    def test1(self):
+        lines = ['......#.#.',
+                 '#..#.#....',
+                 '..#######.'
+                 '.#.#.###..',
+                 '.#..#.....',
+                 '..#....#.#',
+                 '#..#....#.',
+                 '.##.#..###',
+                 '##...#..#.',
+                 '.#....####']
+        self.assertEqual(get_location(lines), 33)
 
-    # def test2(self):
-    #     lines = ['#.#...#.#.',
-    #              '.###....#.',
-    #              '.#....#...',
-    #              '##.#.#.#.#',
-    #              '....#.#.#.',
-    #              '.##..###.#',
-    #              '..#...##..',
-    #              '..##....##',
-    #              '......#...',
-    #              '.####.###.']
-    #     self.assertEqual(get_location(lines), 35)
+    def test2(self):
+        lines = ['#.#...#.#.',
+                 '.###....#.',
+                 '.#....#...',
+                 '##.#.#.#.#',
+                 '....#.#.#.',
+                 '.##..###.#',
+                 '..#...##..',
+                 '..##....##',
+                 '......#...',
+                 '.####.###.']
+        self.assertEqual(get_location(lines), 35)
 
-    # def test3(self):
-    #     lines = ['.#..#..###',
-    #              '####.###.#',
-    #              '....###.#.',
-    #              '..###.##.#',
-    #              '##.##.#.#.',
-    #              '....###..#',
-    #              '..#.#..#.#',
-    #              '#..#.#.###',
-    #              '.##...##.#',
-    #              '.....#.#..']
+    def test3(self):
+        lines = ['.#..#..###',
+                 '####.###.#',
+                 '....###.#.',
+                 '..###.##.#',
+                 '##.##.#.#.',
+                 '....###..#',
+                 '..#.#..#.#',
+                 '#..#.#.###',
+                 '.##...##.#',
+                 '.....#.#..']
 
-    #     self.assertEqual(get_location(lines), 41)
+        self.assertEqual(get_location(lines), 41)
 
-    # def test4(self):
-    #     lines = ['.#..##.###...#######',
-    #              '##.############..##.',
-    #              '.#.######.########.#',
-    #              '.###.#######.####.#.',
-    #              '#####.##.#.##.###.##',
-    #              '..#####..#.#########',
-    #              '####################',
-    #              '#.####....###.#.#.##',
-    #              '##.#################',
-    #              '#####.##.###..####..',
-    #              '..######..##.#######',
-    #              '####.##.####...##..#',
-    #              '.#####..#.######.###',
-    #              '##...#.##########...',
-    #              '#.##########.#######',
-    #              '.####.#.###.###.#.##',
-    #              '....##.##.###..#####',
-    #              '.#.#.###########.###',
-    #              '#.#.#.#####.####.###',
-    #              '###.##.####.##.#..##']
-    #     self.assertEqual(get_location(lines), 210)
+    def test4(self):
+        lines = ['.#..##.###...#######',
+                 '##.############..##.',
+                 '.#.######.########.#',
+                 '.###.#######.####.#.',
+                 '#####.##.#.##.###.##',
+                 '..#####..#.#########',
+                 '####################',
+                 '#.####....###.#.#.##',
+                 '##.#################',
+                 '#####.##.###..####..',
+                 '..######..##.#######',
+                 '####.##.####...##..#',
+                 '.#####..#.######.###',
+                 '##...#.##########...',
+                 '#.##########.#######',
+                 '.####.#.###.###.#.##',
+                 '....##.##.###..#####',
+                 '.#.#.###########.###',
+                 '#.#.#.#####.####.###',
+                 '###.##.####.##.#..##']
+        self.assertEqual(get_location(lines), 210)
 
 
 def get_asteroid_locations(lines):
@@ -88,48 +89,43 @@ def present(x, y, location_vectors):
     for location_vector in location_vectors:
         if location_vector[0]/x == location_vector[1]/y and location_vector[0] != x and location_vector[1] != y:
             if are_opposites(location_vector[0], x) == False and are_opposites(location_vector[1], y) == False:
-                print('ARE SAME')
-                print(x, y, location_vector[0], location_vector[1])
                 return True
-            else:
-                print('ARE OPPOSITES')
-                print(x, y, location_vector[0], location_vector[1])
-
     return False
+
 
 def are_opposites(a, b):
     return a*b < 0
 
-def eliminate(location_vectors):
 
-    print('OLD VECTOR')
-    print(location_vectors)
+def in_array(a, array):
+    for item in array:
+        if item[0] == a[0] and item[1] == a[1]:
+            return True
+    return False
+
+
+def eliminate(location_vectors):
     new_vectors = []
     same_vectors = []
     for vector in location_vectors:
+
         x = vector[0]
-        y = vector[0]
+        y = vector[1]
         if x != 0 and y != 0:
             if present(x, y, new_vectors) == True:
-                if [x, y] not in same_vectors:
+                if in_array([x, y], same_vectors) == False:
                     same_vectors.append([x, y])
-            new_vectors.append(vector)
+        new_vectors.append([x, y])
 
-    # print('NEW VECTOR')
-    # print(new_vectors)
-    # print('Same VECTOR')
-    print('Checking same vecors')
     new_same_vectors = []
     for i in same_vectors:
-        # if i in location_vectors:
-        prest = present(i[0], i[1], location_vectors)
-        print('PRESENT?', i[0], i[1], prest)
-        # print(present(i[0], i[1], location_vectors))
-        if prest == False:
-            if i not in location_vectors:
+        if in_array(i, new_vectors) == True:
+            new_same_vectors.append(i)
+        elif in_array(i, new_vectors) == False:
+            if present(i[0], i[1], new_vectors) == False:
                 new_same_vectors.append(i)
 
-    return location_vectors, new_same_vectors
+    return new_vectors, new_same_vectors
 
 
 def get_location(lines):
@@ -137,8 +133,6 @@ def get_location(lines):
 
     locations = get_asteroid_locations(lines)
     locations_asteroids = []
-    print('LOCATIONS')
-    print(locations)
 
     vectors = []
 
@@ -158,10 +152,8 @@ def get_location(lines):
                 y = location[1]-current[1]
 
                 if x != 0 and y != 0:
-                    # if present(x, y, location_vectors) == False:
                     location_vectors.append([x, y])
                 else:
-                    # location_vectors.append([x, y])
                     if x == 0 and y > 0 and x_more == False:
                         location_vectors.append([x, y])
                         x_more = True
@@ -176,12 +168,14 @@ def get_location(lines):
                         y_less = True
 
         location_vectors, same_vectors = eliminate(location_vectors)
-        print('Current vector:', str(len(location_vectors)), len(same_vectors), str(location_vectors), 'same verctors: ', same_vectors)
+        # print('Current vector:', str(len(location_vectors)), len(
+        #     same_vectors), str(location_vectors), 'same verctors: ', same_vectors)
         vectors.append(location_vectors)
+        locations_asteroids.append(len(location_vectors)-len(same_vectors))
 
-    # print('VECTORS')
-    # for vector in vectors:
-    #     print('Current vector:', str(len(vector)), str(vector))
+    # # print('LOCATION ASTEROIDS')
+    # # print(locations_asteroids)
+    asteroids = max(locations_asteroids)
     return(asteroids)
 
 
