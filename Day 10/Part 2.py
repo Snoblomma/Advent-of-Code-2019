@@ -1,6 +1,7 @@
 import os
 import unittest
 import copy
+import math
 
 
 class TestAsteroidDetector(unittest.TestCase):
@@ -10,7 +11,7 @@ class TestAsteroidDetector(unittest.TestCase):
                  '#####',
                  '....#',
                  '...##']
-        
+
         asteroids, location = get_location(lines)
         self.assertEqual(asteroids, 8)
         self.assertEqual(location, [3, 4])
@@ -95,7 +96,7 @@ def get_asteroid_locations(lines):
     for i in range(len(lines)):
         for j in range(len(lines[0])):
             if lines[i][j] == '#':
-                locations.append([i, j])
+                locations.append([j, i])
     return locations
 
 
@@ -185,22 +186,57 @@ def get_location(lines):
         location_vectors, same_vectors = eliminate(location_vectors)
         vectors.append(location_vectors)
         locations_asteroids.append(len(location_vectors)-len(same_vectors))
-        points.append([location[1], location[0]])
+        points.append(location)
 
     asteroids = max(locations_asteroids)
     return asteroids, points[locations_asteroids.index(asteroids)]
 
 
+def get_vector(start, end):
+    print(start, end)
+    return [end[0] - start[0], end[1] - start[1]]
+
+
+def get_angle(v1, v2):
+    mag1 = math.sqrt(v1[0]**2 + v1[1]**2)
+    mag2 = math.sqrt(v2[0]**2 + v2[1]**2)
+    cos_a = (v1[0] * v2[0] + v1[1] * v2[1]) / (mag1 * mag2)
+    return math.degrees(math.acos(cos_a))
+
+
+def which_asteroid(lines, start_location, n):
+    locations = get_asteroid_locations(lines)
+    angles = []
+    main_vector = get_vector(start_location, [start_location[0], 0])
+    print("MAIN VECTOR")
+    print(main_vector)
+
+    for location in locations:
+        if start_location[0] != location[0] and start_location[1] != location[1]:
+            print('VECTOR')
+            vector = get_vector(start_location, location)
+            print(vector)
+            print('COS')
+            print(get_angle(main_vector, vector))
+
+
 if __name__ == "__main__":
-    unittest.main()
-    __location__ = os.path.realpath(os.path.join(
-        os.getcwd(), os.path.dirname(__file__)))
-    file = open(os.path.join(__location__, 'input.txt'))
+    # unittest.main()
+    # __location__ = os.path.realpath(os.path.join(
+    #     os.getcwd(), os.path.dirname(__file__)))
+    # file = open(os.path.join(__location__, 'input.txt'))
 
-    lines = []
-    for line in file:
-        lines.append(line.rstrip())
+    # lines = []
+    # for line in file:
+    #     lines.append(line.rstrip())
 
-    asteroids, location = get_location(lines)
+    lines = ['.#..#',
+             '.....',
+             '#####',
+             '....#',
+             '...##']
+
+    asteroids, start_location = get_location(lines)
     print(asteroids)
-    which_asteroid(location)
+    n = 10
+    nth_asteroid = which_asteroid(lines, start_location, n)
